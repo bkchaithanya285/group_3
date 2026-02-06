@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken');
 
 const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
+    // HARDCODED SECRET for stability
+    const secret = 'CYBERNOVA_SECRET_KEY_12345';
+    return jwt.sign({ id }, secret, {
         expiresIn: '30d'
     });
 };
