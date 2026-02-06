@@ -48,4 +48,12 @@ const authAdmin = async (req, res) => {
     }
 };
 
-module.exports = { authAdmin };
+const getSystemVersion = (req, res) => {
+    res.json({
+        version: '1.5.0',
+        timestamp: new Date().toISOString(),
+        message: 'Deployment Active - Hardcoded Credentials Enabled'
+    });
+};
+
+module.exports = { authAdmin, getSystemVersion };
