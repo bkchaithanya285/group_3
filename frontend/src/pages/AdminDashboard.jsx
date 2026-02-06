@@ -8,7 +8,13 @@ const AdminDashboard = () => {
     const [hunters, setHunters] = useState([]);
     const [stats, setStats] = useState({ total: 0, approved: 0, pending: 0, rejected: 0 });
     const [loading, setLoading] = useState(true);
-    const [settings, setSettings] = useState({ registrationOpen: true, registrationLimit: 100 });
+    const [settings, setSettings] = useState({
+        registrationOpen: true,
+        registrationLimit: 100,
+        year2Open: true,
+        year3Open: true,
+        year4Open: true
+    });
     const [updatingSettings, setUpdatingSettings] = useState(false);
     const [searchKeyword, setSearchKeyword] = useState('');
 
@@ -196,6 +202,39 @@ const AdminDashboard = () => {
                                     {settings.registrationOpen ? 'OPEN' : 'CLOSED'}
                                 </button>
                             </div>
+
+                            {/* Year Controls */}
+                            <div className="space-y-3 pt-4 border-t border-gray-800">
+                                <h3 className="text-gray-400 text-xs uppercase tracking-widest mb-2">Year Status (Rank)</h3>
+                                <div className="flex justify-between items-center bg-gray-900/50 p-3 rounded">
+                                    <span className="text-gray-300 text-sm">Year II</span>
+                                    <button
+                                        onClick={() => setSettings({ ...settings, year2Open: !settings.year2Open })}
+                                        className={`px-3 py-1 rounded text-xs font-bold transition-all ${settings.year2Open ? 'bg-green-600/20 text-green-400 border border-green-600/50' : 'bg-red-600/20 text-red-400 border border-red-600/50'}`}
+                                    >
+                                        {settings.year2Open ? 'OPEN' : 'CLOSED'}
+                                    </button>
+                                </div>
+                                <div className="flex justify-between items-center bg-gray-900/50 p-3 rounded">
+                                    <span className="text-gray-300 text-sm">Year III</span>
+                                    <button
+                                        onClick={() => setSettings({ ...settings, year3Open: !settings.year3Open })}
+                                        className={`px-3 py-1 rounded text-xs font-bold transition-all ${settings.year3Open ? 'bg-green-600/20 text-green-400 border border-green-600/50' : 'bg-red-600/20 text-red-400 border border-red-600/50'}`}
+                                    >
+                                        {settings.year3Open ? 'OPEN' : 'CLOSED'}
+                                    </button>
+                                </div>
+                                <div className="flex justify-between items-center bg-gray-900/50 p-3 rounded">
+                                    <span className="text-gray-300 text-sm">Year IV</span>
+                                    <button
+                                        onClick={() => setSettings({ ...settings, year4Open: !settings.year4Open })}
+                                        className={`px-3 py-1 rounded text-xs font-bold transition-all ${settings.year4Open ? 'bg-green-600/20 text-green-400 border border-green-600/50' : 'bg-red-600/20 text-red-400 border border-red-600/50'}`}
+                                    >
+                                        {settings.year4Open ? 'OPEN' : 'CLOSED'}
+                                    </button>
+                                </div>
+                            </div>
+
                             <div>
                                 <label className="block text-gray-300 mb-2">Max Hunter Limit</label>
                                 <input

@@ -4,7 +4,13 @@ const Settings = require('../models/Settings');
 const getSettingsDoc = async () => {
     let settings = await Settings.findOne();
     if (!settings) {
-        settings = await Settings.create({ registrationOpen: true, registrationLimit: 100 });
+        settings = await Settings.create({
+            registrationOpen: true,
+            registrationLimit: 100,
+            year2Open: true,
+            year3Open: true,
+            year4Open: true
+        });
     }
     return settings;
 };
@@ -25,6 +31,9 @@ const updateSettings = async (req, res) => {
 
         if (registrationOpen !== undefined) settings.registrationOpen = registrationOpen;
         if (registrationLimit !== undefined) settings.registrationLimit = registrationLimit;
+        if (req.body.year2Open !== undefined) settings.year2Open = req.body.year2Open;
+        if (req.body.year3Open !== undefined) settings.year3Open = req.body.year3Open;
+        if (req.body.year4Open !== undefined) settings.year4Open = req.body.year4Open;
 
         const updatedSettings = await settings.save();
         res.json(updatedSettings);

@@ -29,7 +29,13 @@ const RegistrationPage = () => {
         setShowPreview(true);
     };
 
-    const [status, setStatus] = useState({ open: true, message: '' });
+    const [status, setStatus] = useState({
+        open: true,
+        message: '',
+        year2Open: true,
+        year3Open: true,
+        year4Open: true
+    });
     const [isLoadingStatus, setIsLoadingStatus] = useState(true);
 
     React.useEffect(() => {
@@ -40,6 +46,14 @@ const RegistrationPage = () => {
                     setStatus({ open: false, message: 'GATE SEALED BY ORDER OF THE GUILD' });
                 } else if (data.currentCount >= data.registrationLimit) {
                     setStatus({ open: false, message: 'DUNGEON FULL - LIMIT REACHED' });
+                } else {
+                    setStatus({
+                        open: true,
+                        message: '',
+                        year2Open: data.year2Open !== undefined ? data.year2Open : true,
+                        year3Open: data.year3Open !== undefined ? data.year3Open : true,
+                        year4Open: data.year4Open !== undefined ? data.year4Open : true
+                    });
                 }
             } catch (error) {
                 console.error('Status Check Failed');
@@ -226,16 +240,22 @@ const RegistrationPage = () => {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-cyan-400/80 text-xs font-bold uppercase tracking-widest mb-2 ml-1">Rank Level</label>
+                                    <label className="block text-cyan-400/80 text-xs font-bold uppercase tracking-widest mb-2 ml-1">Rank (Year)</label>
                                     <div className="relative">
                                         <select
                                             name="rankLevel"
                                             className="w-full bg-gray-900/50 border border-gray-700 rounded-lg p-4 text-white focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 focus:outline-none appearance-none transition-all duration-300 cursor-pointer"
                                             value={formData.rankLevel} onChange={handleChange}
                                         >
-                                            <option value="II">II</option>
-                                            <option value="III">III</option>
-                                            <option value="IV">IV</option>
+                                            <option value="II" disabled={!status.year2Open}>
+                                                II {!status.year2Open ? '(Slots Filled)' : ''}
+                                            </option>
+                                            <option value="III" disabled={!status.year3Open}>
+                                                III {!status.year3Open ? '(Slots Filled)' : ''}
+                                            </option>
+                                            <option value="IV" disabled={!status.year4Open}>
+                                                IV {!status.year4Open ? '(Slots Filled)' : ''}
+                                            </option>
                                         </select>
                                         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-cyan-500">
                                             ▼
@@ -313,7 +333,7 @@ const RegistrationPage = () => {
                                     <span className="text-white font-bold text-right">{formData.department}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-400">Rank/Squad:</span>
+                                    <span className="text-gray-400">Rank(Year)/Squad:</span>
                                     <span className="text-white font-bold text-right">{formData.rankLevel} - {formData.squad}</span>
                                 </div>
                                 <div className="flex justify-between">

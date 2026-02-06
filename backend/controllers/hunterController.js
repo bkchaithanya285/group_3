@@ -14,12 +14,25 @@ const registerHunter = async (req, res) => {
             rankLevel,
             department,
             squad,
+            squad,
             communicationRune
         } = req.body;
 
+        const settings = await getSettingsDoc();
+
+        // Check if specific year is closed
+        if (rankLevel === 'II' && !settings.year2Open) {
+            return res.status(400).json({ message: 'Registration for Year II is closed.' });
+        }
+        if (rankLevel === 'III' && !settings.year3Open) {
+            return res.status(400).json({ message: 'Registration for Year III is closed.' });
+        }
+        if (rankLevel === 'IV' && !settings.year4Open) {
+            return res.status(400).json({ message: 'Registration for Year IV is closed.' });
+        }
+
         // Parallelize Checks for Speed
-        const [settings, currentCount, hunterExists] = await Promise.all([
-            getSettingsDoc(),
+        const [currentCount, hunterExists] = await Promise.all([
             Hunter.countDocuments(),
             Hunter.findOne({ $or: [{ hunterId }, { academyMail }] }).lean() // lean() for speed
         ]);
@@ -170,7 +183,10 @@ const getPublicSettings = async (req, res) => {
         res.json({
             registrationOpen: settings.registrationOpen,
             registrationLimit: settings.registrationLimit,
-            currentCount: await Hunter.countDocuments()
+            currentCount: await Hunter.countDocuments(),
+            year2Open: settings.year2Open,
+            year3Open: settings.year3Open,
+            year4Open: settings.year4Open
         });
     } catch (error) {
         res.status(500).json({ message: 'Server Error' });
