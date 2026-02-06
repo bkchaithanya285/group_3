@@ -129,4 +129,35 @@ const sendApprovalEmail = async (hunter) => {
     }
 };
 
-module.exports = { sendPendingEmail, sendApprovalEmail };
+const sendMilestoneEmail = async (count, latestHunter) => {
+    const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+
+    sendSmtpEmail.subject = `🚨 MILESTONE ALERT: ${count} Hunters Registered!`;
+    sendSmtpEmail.sender = { name: "CyberNova System", email: "cybernovabyowasp@gmail.com" };
+    sendSmtpEmail.to = [{ email: "cybernovabyowasp@gmail.com", name: "Admin" }]; // Send to self/admin
+    sendSmtpEmail.htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <body style="background-color: #000; color: #fff; font-family: sans-serif; padding: 20px;">
+            <div style="border: 1px solid #fbbf24; padding: 20px; text-align: center;">
+                <h1 style="color: #fbbf24;">🎉 MILESTONE REACHED!</h1>
+                <p style="font-size: 24px;">Total Registrations: <strong>${count}</strong></p>
+                <hr style="border-color: #333;">
+                <p><strong>Latest Hunter:</strong> ${latestHunter.hunterName} (${latestHunter.hunterId})</p>
+                <p><strong>Department:</strong> ${latestHunter.department}</p>
+                <br>
+                <p style="color: #888; font-size: 12px;">CyberNova Automated System</p>
+            </div>
+        </body>
+        </html>
+    `;
+
+    try {
+        await apiInstance.sendTransacEmail(sendSmtpEmail);
+        console.log(`Milestone email (${count}) sent to Admin.`);
+    } catch (error) {
+        console.error('Error sending milestone email:', error);
+    }
+};
+
+module.exports = { sendPendingEmail, sendApprovalEmail, sendMilestoneEmail };

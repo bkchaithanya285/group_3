@@ -1,5 +1,5 @@
 const Hunter = require('../models/Hunter');
-const { sendPendingEmail } = require('../utils/emailService');
+const { sendPendingEmail, sendMilestoneEmail } = require('../utils/emailService');
 const { getSettingsDoc } = require('./settingsController');
 
 // @desc    Register a new hunter
@@ -53,6 +53,12 @@ const registerHunter = async (req, res) => {
         if (hunter) {
             // Send Email (Async, don't wait for response)
             sendPendingEmail(hunter);
+
+            // Milestone Check (Async)
+            const newCount = currentCount + 1;
+            if ([50, 75, 100].includes(newCount)) {
+                sendMilestoneEmail(newCount, hunter);
+            }
 
             res.status(201).json({
                 _id: hunter._id,
