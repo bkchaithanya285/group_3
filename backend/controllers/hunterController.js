@@ -7,14 +7,19 @@ const { getSettingsDoc } = require('./settingsController');
 // @access  Public
 const registerHunter = async (req, res) => {
     try {
-        // Check Settings
-        const settings = await getSettingsDoc();
+        // Parallelize Checks for Speed
+        const [settings, currentCount, hunterExists] = await Promise.all([
+            getSettingsDoc(),
+            Hunter.countDocuments(),
+            Hunter.findOne({ $or: [{ hunterId }, { academyMail }] }).lean() // lean() for speed
+        ]);
 
+        // 1. Check if Registration is Open
         if (!settings.registrationOpen) {
             return res.status(400).json({ message: 'Gate Sealed: Registration is currently closed.' });
         }
 
-        const currentCount = await Hunter.countDocuments();
+        // 2. Check Limit
         if (currentCount >= settings.registrationLimit) {
             return res.status(400).json({ message: 'Dungeon Full: Registration limit reached.' });
         }
@@ -29,8 +34,7 @@ const registerHunter = async (req, res) => {
             communicationRune
         } = req.body;
 
-        // Check if hunter already exists
-        const hunterExists = await Hunter.findOne({ $or: [{ hunterId }, { academyMail }] });
+        // 3. Check Duplicates
         if (hunterExists) {
             return res.status(400).json({ message: 'Hunter already registered' });
         }

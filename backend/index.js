@@ -30,10 +30,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Database Connection
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.log('MongoDB Connection Error:', err));
-
 // Routes (Placeholder)
 app.get('/', (req, res) => {
     res.send('CyberNova API Running');
@@ -45,6 +41,18 @@ const adminRoutes = require('./routes/adminRoutes');
 app.use('/api/hunters', hunterRoutes);
 app.use('/api/admin', adminRoutes);
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+// Database Connection & Server Start
+mongoose.connect(process.env.MONGO_URI, {
+    serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+    socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+})
+    .then(() => {
+        console.log('MongoDB Connected');
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    })
+    .catch(err => {
+        console.log('MongoDB Connection Error:', err);
+        process.exit(1); // Exit if DB fails
+    });
