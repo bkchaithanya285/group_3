@@ -18,12 +18,15 @@ const authAdmin = async (req, res) => {
         const envPassword = 'ONEPIECE@CYBERNOVAA';
 
         console.log('--- Admin Login Attempt (Hardcoded) ---');
-        console.log('Received Username:', username);
-
+        console.log('Request Body:', JSON.stringify(req.body));
+        console.log(`Expected: '${envUsername}' / '${envPassword}'`);
+        console.log(`Received: '${username}' / '${password}'`);
 
         // Safe comparison with trim
         const isUsernameMatch = username && username.trim() === envUsername.trim();
         const isPasswordMatch = password && password.trim() === envPassword.trim();
+
+        console.log(`Match Result: User=${isUsernameMatch}, Pass=${isPasswordMatch}`);
 
         if (isUsernameMatch && isPasswordMatch) {
             console.log('Login Successful');
@@ -37,7 +40,7 @@ const authAdmin = async (req, res) => {
             });
         } else {
             console.log('Login Failed: Mismatch');
-            res.status(401).json({ message: 'Invalid username or password' });
+            res.status(401).json({ message: 'Invalid credentials (DEBUG MODE) - Check Server Logs' });
         }
     } catch (error) {
         console.error('Admin Login Error:', error);
