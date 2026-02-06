@@ -13,20 +13,13 @@ const authAdmin = async (req, res) => {
     try {
         const { username, password } = req.body;
 
-        const envUsername = process.env.ADMIN_USERNAME || '';
-        const envPassword = process.env.ADMIN_PASSWORD || '';
+        // HARDCODED CREDENTIALS AS REQUESTED
+        const envUsername = 'CYBERNOVA';
+        const envPassword = 'ONEPIECE@CYBERNOVAA';
 
-        console.log('--- Admin Login Attempt ---');
+        console.log('--- Admin Login Attempt (Hardcoded) ---');
         console.log('Received Username:', username);
-        // Do NOT log the actual password in production logs, only length check
-        console.log('Received Password Length:', password ? password.length : 0);
-        console.log('Env Username:', envUsername);
-        console.log('Env Password Length:', envPassword ? envPassword.length : 0);
 
-        if (!envUsername || !envPassword) {
-            console.error('CRITICAL: ADMIN_USERNAME or ADMIN_PASSWORD not set in environment variables');
-            return res.status(500).json({ message: 'Server configuration error' });
-        }
 
         // Safe comparison with trim
         const isUsernameMatch = username && username.trim() === envUsername.trim();
