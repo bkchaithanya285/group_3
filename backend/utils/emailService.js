@@ -132,21 +132,73 @@ const sendApprovalEmail = async (hunter) => {
 const sendMilestoneEmail = async (count, latestHunter) => {
     const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
-    sendSmtpEmail.subject = `🚨 MILESTONE ALERT: ${count} Hunters Registered!`;
-    sendSmtpEmail.sender = { name: "CyberNova System", email: "cybernovabyowasp@gmail.com" };
-    sendSmtpEmail.to = [{ email: "cybernovabyowasp@gmail.com", name: "Admin" }]; // Send to self/admin
+    sendSmtpEmail.subject = `🚀 [MILESTONE] ${count} Hunters Deployed | CyberNova`;
+    sendSmtpEmail.sender = { name: "CyberNova Automated System", email: "cybernovabyowasp@gmail.com" };
+
+    // Send to both admins
+    sendSmtpEmail.to = [
+        { email: "dineshnaidu2065@gmail.com", name: "Dinesh Naidu" },
+        { email: "bkrishnachaithanya285@gmail.com", name: "Krishna Chaithanya" }
+    ];
+
+    const timestamp = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+
     sendSmtpEmail.htmlContent = `
         <!DOCTYPE html>
         <html>
-        <body style="background-color: #000; color: #fff; font-family: sans-serif; padding: 20px;">
-            <div style="border: 1px solid #fbbf24; padding: 20px; text-align: center;">
-                <h1 style="color: #fbbf24;">🎉 MILESTONE REACHED!</h1>
-                <p style="font-size: 24px;">Total Registrations: <strong>${count}</strong></p>
-                <hr style="border-color: #333;">
-                <p><strong>Latest Hunter:</strong> ${latestHunter.hunterName} (${latestHunter.hunterId})</p>
-                <p><strong>Department:</strong> ${latestHunter.department}</p>
-                <br>
-                <p style="color: #888; font-size: 12px;">CyberNova Automated System</p>
+        <head>
+            <style>
+                body { background-color: #050505; color: #e2e8f0; font-family: 'Courier New', monospace; margin: 0; padding: 0; }
+                .container { max-width: 600px; margin: 20px auto; background-color: #0f0f10; border: 1px solid #7627dc; border-radius: 8px; overflow: hidden; box-shadow: 0 0 25px rgba(118, 39, 220, 0.2); }
+                .header { background: linear-gradient(135deg, #2e1065 0%, #000000 100%); padding: 30px 20px; text-align: center; border-bottom: 2px solid #fbbf24; }
+                .badge { display: inline-block; background-color: #fbbf24; color: #000; padding: 5px 15px; border-radius: 50px; font-weight: bold; font-size: 12px; margin-bottom: 10px; }
+                .title { font-size: 32px; color: #ffffff; margin: 10px 0; text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); text-transform: uppercase; letter-spacing: 1px; }
+                .stat-box { background-color: #1a1a1c; border-left: 4px solid #7627dc; padding: 20px; margin: 20px; }
+                .stat-value { font-size: 48px; font-weight: bold; color: #7627dc; display: block; line-height: 1; }
+                .stat-label { color: #94a3b8; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; }
+                .hunter-info { margin: 20px; padding: 15px; border: 1px dashed #333; border-radius: 4px; background-color: #0a0a0a; }
+                .hunter-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+                .label { color: #64748b; }
+                .value { color: #e2e8f0; font-weight: bold; }
+                .footer { text-align: center; padding: 20px; color: #475569; font-size: 11px; border-top: 1px solid #1e293b; background-color: #050505; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <span class="badge">SYSTEM ALERT</span>
+                    <h1 class="title">Milestone Unlocked</h1>
+                </div>
+                
+                <div class="stat-box">
+                    <span class="stat-value">${count}</span>
+                    <span class="stat-label">Total Authenticated Hunters</span>
+                </div>
+
+                <div class="hunter-info">
+                    <p style="margin: 0 0 10px 0; color: #fbbf24; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">// Latest Access Log</p>
+                    <div class="hunter-row">
+                        <span class="label">Operative:</span>
+                        <span class="value">${latestHunter.hunterName}</span>
+                    </div>
+                    <div class="hunter-row">
+                        <span class="label">ID Tag:</span>
+                        <span class="value">${latestHunter.hunterId}</span>
+                    </div>
+                    <div class="hunter-row">
+                        <span class="label">Affiliation:</span>
+                        <span class="value">${latestHunter.department}</span>
+                    </div>
+                    <div class="hunter-row">
+                        <span class="label">Timestamp:</span>
+                        <span class="value">${timestamp}</span>
+                    </div>
+                </div>
+
+                <div class="footer">
+                    SECURE TRANSMISSION // CYBERNOVA SERIES 2026<br>
+                    OWASP x CYBERNERDS x CSI
+                </div>
             </div>
         </body>
         </html>
@@ -154,7 +206,7 @@ const sendMilestoneEmail = async (count, latestHunter) => {
 
     try {
         await apiInstance.sendTransacEmail(sendSmtpEmail);
-        console.log(`Milestone email (${count}) sent to Admin.`);
+        console.log(`Milestone email (${count}) sent to Admins.`);
     } catch (error) {
         console.error('Error sending milestone email:', error);
     }
