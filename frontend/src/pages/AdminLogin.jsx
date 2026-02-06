@@ -17,6 +17,7 @@ const AdminLogin = () => {
             const { data } = await api.post('/admin/login', credentials);
             localStorage.setItem('adminToken', data.token);
             navigate('/admin/dashboard');
+        } catch (err) {
             setError(err.response?.data?.message || 'Connection Error (Backend Unreachable)');
         }
     };
