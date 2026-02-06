@@ -20,6 +20,16 @@ const AdminDashboard = () => {
 
     // Modal State
     const [selectedHunter, setSelectedHunter] = useState(null);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [newHunter, setNewHunter] = useState({
+        hunterName: '',
+        hunterId: '',
+        academyMail: '',
+        rankLevel: 'II',
+        department: '',
+        squad: '',
+        communicationRune: ''
+    });
 
     useEffect(() => {
         const token = localStorage.getItem('adminToken');
@@ -101,6 +111,21 @@ const AdminDashboard = () => {
         }
     };
 
+    const handleAddSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const config = { headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` } };
+            await api.post('/hunters/admin/add', newHunter, config);
+            alert('Guardian Added Successfully & Approved');
+            setShowAddModal(false);
+            setNewHunter({ hunterName: '', hunterId: '', academyMail: '', rankLevel: 'II', department: '', squad: '', communicationRune: '' });
+            fetchData();
+        } catch (error) {
+            console.error(error);
+            alert(error.response?.data?.message || 'Failed to add hunter');
+        }
+    };
+
     const handleSettingsUpdate = async () => {
         setUpdatingSettings(true);
         try {
@@ -155,6 +180,12 @@ const AdminDashboard = () => {
                         <p className="text-gray-400 text-sm tracking-widest mt-2">SYSTEM MONITORING ACTIVE</p>
                     </div>
                     <div className="flex gap-4">
+                        <button
+                            onClick={() => setShowAddModal(true)}
+                            className="bg-green-600/20 border border-green-500/50 text-green-400 px-6 py-2 rounded hover:bg-green-500/20 transition-all uppercase tracking-widest text-sm font-bold flex items-center gap-2"
+                        >
+                            + ADD HUNTER
+                        </button>
                         <button
                             onClick={handleDeleteAll}
                             className="bg-red-900/40 border border-red-500/50 text-red-400 px-6 py-2 rounded hover:bg-red-500/20 transition-all uppercase tracking-widest text-sm font-bold flex items-center gap-2"
@@ -423,6 +454,67 @@ const AdminDashboard = () => {
                                         </button>
                                     </div>
                                 )}
+                            </motion.div>
+                        </div>
+                    )}
+                </AnimatePresence>
+
+                {/* Add Hunter Modal */}
+                <AnimatePresence>
+                    {showAddModal && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                                onClick={() => setShowAddModal(false)}
+                            ></motion.div>
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.9, opacity: 0 }}
+                                className="relative z-60 bg-gray-900 border border-green-500/50 p-8 rounded-2xl shadow-[0_0_50px_rgba(34,197,94,0.3)] max-w-lg w-full"
+                            >
+                                <h2 className="text-2xl font-display text-green-400 mb-6 border-b border-gray-700 pb-2">MANUAL REGISTRATION</h2>
+                                <form onSubmit={handleAddSubmit} className="space-y-4">
+                                    <input required placeholder="Full Name" className="w-full bg-black/50 border border-gray-700 p-3 rounded text-white"
+                                        value={newHunter.hunterName} onChange={e => setNewHunter({ ...newHunter, hunterName: e.target.value })} />
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <input required placeholder="Reg ID" className="w-full bg-black/50 border border-gray-700 p-3 rounded text-white font-mono"
+                                            value={newHunter.hunterId} onChange={e => setNewHunter({ ...newHunter, hunterId: e.target.value })} />
+                                        <input required placeholder="Mobile/Wa" className="w-full bg-black/50 border border-gray-700 p-3 rounded text-white"
+                                            value={newHunter.communicationRune} onChange={e => setNewHunter({ ...newHunter, communicationRune: e.target.value })} />
+                                    </div>
+
+                                    <input required type="email" placeholder="Email Address" className="w-full bg-black/50 border border-gray-700 p-3 rounded text-white"
+                                        value={newHunter.academyMail} onChange={e => setNewHunter({ ...newHunter, academyMail: e.target.value })} />
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <input required placeholder="Department" className="w-full bg-black/50 border border-gray-700 p-3 rounded text-white"
+                                            value={newHunter.department} onChange={e => setNewHunter({ ...newHunter, department: e.target.value })} />
+                                        <input required placeholder="Squad" className="w-full bg-black/50 border border-gray-700 p-3 rounded text-white"
+                                            value={newHunter.squad} onChange={e => setNewHunter({ ...newHunter, squad: e.target.value })} />
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <label className="text-gray-400 text-xs uppercase tracking-widest block mb-1">Rank (Year)</label>
+                                        <select className="w-full bg-black/50 border border-gray-700 p-3 rounded text-white"
+                                            value={newHunter.rankLevel} onChange={e => setNewHunter({ ...newHunter, rankLevel: e.target.value })}>
+                                            <option value="II">II</option>
+                                            <option value="III">III</option>
+                                            <option value="IV">IV</option>
+                                        </select>
+                                    </div>
+
+                                    <button type="submit" className="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(34,197,94,0.4)]">
+                                        APPROVE & RECRUIT
+                                    </button>
+                                    <button type="button" onClick={() => setShowAddModal(false)} className="w-full py-2 text-gray-400 hover:text-white uppercase text-xs tracking-widest">
+                                        Cancel Operation
+                                    </button>
+                                </form>
                             </motion.div>
                         </div>
                     )}

@@ -14,7 +14,6 @@ const registerHunter = async (req, res) => {
             rankLevel,
             department,
             squad,
-            squad,
             communicationRune
         } = req.body;
 
@@ -193,4 +192,63 @@ const getPublicSettings = async (req, res) => {
     }
 };
 
-module.exports = { registerHunter, getAllHunters, updateHunterStatus, exportHunters, deleteHunter, deleteAllHunters, getPublicSettings };
+
+const createHunterByAdmin = async (req, res) => {
+    try {
+        const {
+            hunterName,
+            hunterId,
+            academyMail,
+            rankLevel,
+            department,
+            squad,
+            communicationRune
+        } = req.body;
+
+        // Check if exists
+        const hunterExists = await Hunter.findOne({ $or: [{ hunterId }, { academyMail }] });
+        if (hunterExists) {
+            return res.status(400).json({ message: 'Hunter already registered' });
+        }
+
+        const hunter = await Hunter.create({
+            hunterName,
+            hunterId,
+            academyMail,
+            rankLevel,
+            department,
+            squad,
+            communicationRune,
+            joinedGuild: false,
+            status: 'approved' // Auto-approve
+        });
+
+        if (hunter) {
+            // Send Approval Email Immediately
+            sendApprovalEmail(hunter);
+
+            res.status(201).json({
+                _id: hunter._id,
+                hunterName: hunter.hunterName,
+                status: hunter.status,
+                message: 'Hunter Added & Approved'
+            });
+        } else {
+            res.status(400).json({ message: 'Invalid data' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+module.exports = {
+    registerHunter,
+    getAllHunters,
+    updateHunterStatus,
+    exportHunters,
+    deleteHunter,
+    deleteAllHunters,
+    getPublicSettings,
+    createHunterByAdmin
+};

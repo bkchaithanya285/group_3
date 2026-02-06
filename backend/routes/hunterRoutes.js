@@ -30,9 +30,10 @@ const upload = multer({
 });
 
 // Routes
-const { getPublicSettings } = require('../controllers/hunterController');
+const { getPublicSettings, createHunterByAdmin } = require('../controllers/hunterController');
 router.get('/status', getPublicSettings);
 router.post('/register', registerHunter);
+router.post('/admin/add', protect, admin, createHunterByAdmin);
 router.get('/', protect, admin, getAllHunters);
 router.put('/:id/status', protect, admin, updateHunterStatus);
 const { exportHunters } = require('../controllers/hunterController');
