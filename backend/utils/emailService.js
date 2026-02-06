@@ -45,8 +45,9 @@ const sendPendingEmail = async (hunter) => {
 
                     <p>While you wait for verification, it is <strong>COMPULSORY</strong> to join the WhatsApp Guild:</p>
                     
-                    <a href="https://chat.whatsapp.com/K32X11n8XrgIrdcSCKq3Cs?mode=gi_t" class="cta-btn">
-                        JOIN WHATSAPP GUILD
+                    <a href="https://chat.whatsapp.com/K32X11n8XrgIrdcSCKq3Cs?mode=gi_t" 
+                       style="display: block; width: 100%; max-width: 300px; margin: 30px auto; text-align: center; background-color: #25D366; color: #fff; padding: 15px; text-decoration: none; border-radius: 5px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; font-size: 14px;">
+                        📱 JOIN WHATSAPP GUILD
                     </a>
 
                     <p style="margin-top: 20px;">Please stand by.</p>
