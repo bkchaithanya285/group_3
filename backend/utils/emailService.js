@@ -12,7 +12,7 @@ const sendPendingEmail = async (hunter) => {
     const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
     sendSmtpEmail.subject = "CyberNova Registration - Pending Approval";
-    sendSmtpEmail.sender = { name: "CyberNova Admin", email: "cybernovabyowasp@gmail.com" };
+    sendSmtpEmail.sender = { name: "CyberNova Admin", email: "genesisbycsi@gmail.com" };
     sendSmtpEmail.to = [{ email: hunter.academyMail, name: hunter.hunterName }];
     sendSmtpEmail.htmlContent = `
         <!DOCTYPE html>
@@ -73,7 +73,7 @@ const sendApprovalEmail = async (hunter) => {
     const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
     sendSmtpEmail.subject = "ACCESS GRANTED - CyberNova Gate Open";
-    sendSmtpEmail.sender = { name: "CyberNova Admin", email: "cybernovabyowasp@gmail.com" };
+    sendSmtpEmail.sender = { name: "CyberNova Admin", email: "genesisbycsi@gmail.com" };
     sendSmtpEmail.to = [{ email: hunter.academyMail, name: hunter.hunterName }];
     sendSmtpEmail.htmlContent = `
         <!DOCTYPE html>
@@ -134,7 +134,7 @@ const sendMilestoneEmail = async (count, latestHunter) => {
     const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
     sendSmtpEmail.subject = `🚀 [MILESTONE] ${count} Hunters Deployed | CyberNova`;
-    sendSmtpEmail.sender = { name: "CyberNova Automated System", email: "cybernovabyowasp@gmail.com" };
+    sendSmtpEmail.sender = { name: "CyberNova Automated System", email: "genesisbycsi@gmail.com" };
 
     // Send to both admins
     sendSmtpEmail.to = [
@@ -217,7 +217,7 @@ const sendRejectionEmail = async (hunter) => {
     const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
     sendSmtpEmail.subject = "Update on your CyberNova Registration";
-    sendSmtpEmail.sender = { name: "CyberNova Admin", email: "cybernovabyowasp@gmail.com" };
+    sendSmtpEmail.sender = { name: "CyberNova Admin", email: "genesisbycsi@gmail.com" };
     sendSmtpEmail.to = [{ email: hunter.academyMail, name: hunter.hunterName }];
     sendSmtpEmail.htmlContent = `
         <!DOCTYPE html>
