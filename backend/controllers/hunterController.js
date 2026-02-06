@@ -1,5 +1,5 @@
 const Hunter = require('../models/Hunter');
-const { sendPendingEmail, sendMilestoneEmail } = require('../utils/emailService');
+const { sendPendingEmail, sendMilestoneEmail, sendRejectionEmail } = require('../utils/emailService');
 const { getSettingsDoc } = require('./settingsController');
 
 // @desc    Register a new hunter
@@ -97,6 +97,8 @@ const updateHunterStatus = async (req, res) => {
             // Send email if approved
             if (status === 'approved') {
                 sendApprovalEmail(updatedHunter);
+            } else if (status === 'rejected') {
+                sendRejectionEmail(updatedHunter);
             }
 
             res.json(updatedHunter);

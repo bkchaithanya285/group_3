@@ -213,4 +213,60 @@ const sendMilestoneEmail = async (count, latestHunter) => {
     }
 };
 
-module.exports = { sendPendingEmail, sendApprovalEmail, sendMilestoneEmail };
+const sendRejectionEmail = async (hunter) => {
+    const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+
+    sendSmtpEmail.subject = "Update on your CyberNova Registration";
+    sendSmtpEmail.sender = { name: "CyberNova Admin", email: "cybernovabyowasp@gmail.com" };
+    sendSmtpEmail.to = [{ email: hunter.academyMail, name: hunter.hunterName }];
+    sendSmtpEmail.htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body { background-color: #000; color: #fff; font-family: 'Courier New', monospace; padding: 20px; }
+                .container { max-width: 600px; margin: 0 auto; border: 1px solid #ef4444; border-radius: 10px; overflow: hidden; box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); }
+                .header { background: linear-gradient(90deg, #450a0a, #000); padding: 20px; text-align: center; border-bottom: 2px solid #ef4444; }
+                .header h1 { margin: 0; color: #ef4444; text-shadow: 0 0 10px #ef4444; letter-spacing: 2px; }
+                .content { padding: 30px; background-color: #0a0a0a; }
+                .message-box { border-left: 4px solid #ef4444; padding: 15px; background-color: #1a1a1a; margin: 20px 0; color: #d1d5db; }
+                .footer { text-align: center; color: #666; padding: 15px; font-size: 12px; border-top: 1px solid #333; }
+                .love-note { color: #f472b6; font-weight: bold; margin-top: 5px; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>ACCESS DENIED</h1>
+                </div>
+                <div class="content">
+                    <p style="font-size: 16px; color: #fff;">Greetings Hunter <strong>${hunter.hunterName}</strong>,</p>
+                    
+                    <div class="message-box">
+                        <p style="margin: 0;">We regret to inform you that your registration for the CyberNova Series 2026 has not been accepted at this time.</p>
+                    </div>
+
+                    <p>Sorry for the inconvenience. We encourage you to try next time.</p>
+                    
+                    <p style="font-size: 18px; font-weight: bold; color: #fbbf24; text-align: center; margin-top: 30px;">
+                        BETTER LUCK NEXT TIME! 🍀
+                    </p>
+                </div>
+                <div class="footer">
+                    SYSTEM GENERATED MESSAGE // DO NOT REPLY<br>
+                    <div class="love-note">❤️ With love from OWASP and CYBERNERDS 🤓</div>
+                </div>
+            </div>
+        </body>
+        </html>
+    `;
+
+    try {
+        await apiInstance.sendTransacEmail(sendSmtpEmail);
+        console.log('Rejection email sent to ' + hunter.academyMail);
+    } catch (error) {
+        console.error('Error sending rejection email:', error);
+    }
+};
+
+module.exports = { sendPendingEmail, sendApprovalEmail, sendMilestoneEmail, sendRejectionEmail };
