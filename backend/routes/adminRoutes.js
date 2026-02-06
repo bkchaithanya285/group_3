@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { authAdmin, getSystemVersion } = require('../controllers/adminAuthController');
+const { authAdmin } = require('../controllers/adminAuthController');
 const { getSettings, updateSettings } = require('../controllers/settingsController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
 router.post('/login', authAdmin);
-router.get('/version', getSystemVersion);
+
 
 // Settings Routes
 router.get('/settings', protect, admin, getSettings);
