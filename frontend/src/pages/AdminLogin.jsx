@@ -17,15 +17,14 @@ const AdminLogin = () => {
             const { data } = await api.post('/admin/login', credentials);
             localStorage.setItem('adminToken', data.token);
             navigate('/admin/dashboard');
-        } catch (err) {
-            setError(err.response?.data?.message || 'Invalid credentials');
+            setError(err.response?.data?.message || 'Connection Error (Backend Unreachable)');
         }
     };
 
     return (
         <div className="min-h-screen bg-black flex items-center justify-center p-4">
             <div className="w-full max-w-md bg-gray-900 border border-purple-900 p-8 rounded shadow-[0_0_20px_#7627dc]">
-                <h2 className="text-3xl text-center text-purple-500 font-display mb-6">Guild Master Login</h2>
+                <h2 className="text-3xl text-center text-purple-500 font-display mb-6">Guild Master Login (v1.5)</h2>
                 {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
                 <form onSubmit={handleLogin} className="space-y-6">
