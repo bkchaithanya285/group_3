@@ -30,6 +30,8 @@ const upload = multer({
 });
 
 // Routes
+const { getPublicSettings } = require('../controllers/hunterController');
+router.get('/status', getPublicSettings);
 router.post('/register', registerHunter);
 router.get('/', protect, admin, getAllHunters);
 router.put('/:id/status', protect, admin, updateHunterStatus);

@@ -29,6 +29,27 @@ const RegistrationPage = () => {
         setShowPreview(true);
     };
 
+    const [status, setStatus] = useState({ open: true, message: '' });
+    const [isLoadingStatus, setIsLoadingStatus] = useState(true);
+
+    React.useEffect(() => {
+        const checkStatus = async () => {
+            try {
+                const { data } = await api.get('/hunters/status');
+                if (!data.registrationOpen) {
+                    setStatus({ open: false, message: 'GATE SEALED BY ORDER OF THE GUILD' });
+                } else if (data.currentCount >= data.registrationLimit) {
+                    setStatus({ open: false, message: 'DUNGEON FULL - LIMIT REACHED' });
+                }
+            } catch (error) {
+                console.error('Status Check Failed');
+            } finally {
+                setIsLoadingStatus(false);
+            }
+        };
+        checkStatus();
+    }, []);
+
     const handleSubmit = async () => {
         setIsSubmitting(true);
         setError(null);
@@ -45,6 +66,32 @@ const RegistrationPage = () => {
             setIsSubmitting(false);
         }
     };
+
+    if (isLoadingStatus) {
+        return <div className="min-h-screen bg-black text-white flex items-center justify-center font-mono">INITIALIZING GATE LINK...</div>;
+    }
+
+    if (!status.open) {
+        return (
+            <div className="min-h-screen relative flex flex-col items-center justify-center p-6 text-center text-white overflow-hidden">
+                <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat grayscale" style={{ backgroundImage: "url('/bg.jpg')" }}>
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+                </div>
+                <div className="relative z-10 border border-red-500/50 p-12 rounded-2xl shadow-[0_0_50px_rgba(220,38,38,0.3)] bg-black/80 max-w-lg w-full">
+                    <h1 className="text-4xl font-display text-red-500 mb-4 tracking-widest uppercase animate-pulse">🚫 GATE CLOSED 🚫</h1>
+                    <p className="text-gray-400 font-mono text-lg border-t border-red-900/50 pt-6">
+                        {status.message}
+                    </p>
+                    <p className="text-red-400/60 text-xs mt-4 uppercase tracking-[0.2em]">
+                        NO FURTHER REGISTRATIONS ACCEPTED
+                    </p>
+                    <button onClick={() => navigate('/')} className="mt-8 px-6 py-2 border border-gray-700 text-gray-500 hover:text-white hover:border-white transition-all rounded uppercase text-sm">
+                        Return
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     if (isSubmitted) {
         return (

@@ -162,4 +162,17 @@ const deleteAllHunters = async (req, res) => {
     }
 };
 
-module.exports = { registerHunter, getAllHunters, updateHunterStatus, exportHunters, deleteHunter, deleteAllHunters };
+const getPublicSettings = async (req, res) => {
+    try {
+        const settings = await getSettingsDoc();
+        res.json({
+            registrationOpen: settings.registrationOpen,
+            registrationLimit: settings.registrationLimit,
+            currentCount: await Hunter.countDocuments()
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+module.exports = { registerHunter, getAllHunters, updateHunterStatus, exportHunters, deleteHunter, deleteAllHunters, getPublicSettings };
