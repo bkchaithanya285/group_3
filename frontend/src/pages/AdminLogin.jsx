@@ -13,6 +13,8 @@ const AdminLogin = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        console.log('Attempting login...');
+        console.log('API Base URL:', api.defaults.baseURL); // DEBUG: Show user where we are connecting
         try {
             const { data } = await api.post('/admin/login', credentials);
             localStorage.setItem('adminToken', data.token);
