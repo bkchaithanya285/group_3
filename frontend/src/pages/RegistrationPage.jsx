@@ -168,11 +168,11 @@ const RegistrationPage = () => {
                             </div>
 
                             <div className="group relative">
-                                <label className="block text-cyan-400/80 text-xs font-bold uppercase tracking-widest mb-2 ml-1">Hunter Guild</label>
+                                <label className="block text-cyan-400/80 text-xs font-bold uppercase tracking-widest mb-2 ml-1">Department (e.g. CSE, ECE)</label>
                                 <input
                                     type="text" name="department" required
-                                    className="w-full bg-gray-900/50 border border-gray-700 rounded-lg p-4 text-white focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 focus:outline-none transition-all duration-300 placeholder-white/20 tracking-widest uppercase"
-                                    placeholder="DEPARTMENT"
+                                    className="w-full bg-gray-900/50 border border-gray-700 rounded-lg p-4 text-white focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 focus:outline-none transition-all duration-300 placeholder-gray-600 tracking-widest uppercase"
+                                    placeholder="e.g. CSE"
                                     value={formData.department} onChange={handleChange}
                                 />
                             </div>
@@ -196,11 +196,11 @@ const RegistrationPage = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-cyan-400/80 text-xs font-bold uppercase tracking-widest mb-2 ml-1">Squad</label>
+                                    <label className="block text-cyan-400/80 text-xs font-bold uppercase tracking-widest mb-2 ml-1">Section (e.g. 22S02)</label>
                                     <input
                                         type="text" name="squad" required
                                         className="w-full bg-gray-900/50 border border-gray-700 rounded-lg p-4 text-white focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 focus:outline-none transition-all duration-300 placeholder-gray-600 uppercase"
-                                        placeholder="Section (e.g. A)"
+                                        placeholder="e.g. 22S02"
                                         value={formData.squad} onChange={handleChange}
                                     />
                                 </div>
