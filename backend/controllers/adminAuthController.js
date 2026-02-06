@@ -13,13 +13,11 @@ const authAdmin = async (req, res) => {
     try {
         const { username, password } = req.body;
 
-        const envUsername = process.env.ADMIN_USERNAME;
-        const envPassword = process.env.ADMIN_PASSWORD;
+        // HARDCODED CREDENTIALS (BYPASSING ENV)
+        const envUsername = 'CYBERNOVA';
+        const envPassword = 'ONEPIECE@CYBERNOVAA';
 
-        if (!envUsername || !envPassword) {
-            console.error('Server Error: Admin credentials not configured.');
-            return res.status(500).json({ message: 'Server configuration error' });
-        }
+        // if (!envUsername || !envPassword) { ... } // Removed env check
 
         // Safe comparison
         const isUsernameMatch = username && username.trim() === envUsername.trim();
