@@ -56,7 +56,7 @@ const registerHunter = async (req, res) => {
 
             // Milestone Check (Async)
             const newCount = currentCount + 1;
-            if ([50, 75, 100].includes(newCount)) {
+            if ([50, 75, 100, 125, 150].includes(newCount)) {
                 sendMilestoneEmail(newCount, hunter);
             }
 
